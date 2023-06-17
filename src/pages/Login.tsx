@@ -1,107 +1,116 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {
-  Alert,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import {RootStackLinks} from '../app/routes';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import * as loginAPI from '../app/apis/login';
-function Login() {
-  const [email, setEmail] = useState<string>();
-  const [password, setPassword] = useState<string>();
-  const navigation: NavigationProp<RootStackLinks> = useNavigation();
+import * as loginAPI from '../app/apis/client';
+import RHFInput from '../components/forms/RHFInput';
+import {useForm} from 'react-hook-form';
+import FullLogoImg from '../asset/images/logo_full.png';
+import Button from '../components/buttons/Button';
+import * as yup from 'yup';
+import {yupResolver} from '@hookform/resolvers/yup';
+import useAuth from '../app/hooks/useAuth';
+import jwt_decode from 'jwt-decode';
+import useUser from '../app/hooks/useUser';
+import {UserSlice} from '../app/store/slices/userSlice';
 
+const LoginSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required('이메일 주소를 입력해주세요')
+    .email('이메일 형식으로 입력해주세요'),
+  password: yup.string().required('비밀번호를 입력해주세요'),
+});
+
+function Login() {
+  const {setToken} = useAuth();
+  const {setUser} = useUser();
+  const {handleSubmit, control, setError} = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(LoginSchema),
+  });
+  const navigation: NavigationProp<RootStackLinks> = useNavigation();
   const handlers = {
-    onPressLogin: async () => {
-      if (!email || !password)
-        return Alert.alert('입력 오류', '모든 데이터 입력');
-      const {data} = await loginAPI.loginUser({email, password});
-      console.log(data);
+    onPressLogin: async (uploadData: any) => {
+      const {data} = await loginAPI.loginUser(uploadData);
+
+      // 로그인 실패시.
+      if (!data?.ok) {
+        return setError('password', {message: data.error});
+      }
+
+      // 로그인 성공시
+      // 토큰 저장
+      setToken(data.token);
+      const decoded: UserSlice = jwt_decode(data.token);
+
+      // 유저 기본 정보 저장
+      setUser(decoded);
     },
     onPressJoin: () => {
       navigation.navigate('Join');
     },
   };
   return (
-    <KeyboardAwareScrollView style={styled.container}>
-      <View style={styled.contentWrapper}>
-        <TextInput
-          value={email}
-          style={styled.input}
-          placeholder="로그인 아이디"
-          onChangeText={data => setEmail(data)}
+    <KeyboardAwareScrollView>
+      <View style={styled.imageWrapper}>
+        <Image
+          source={FullLogoImg}
+          style={styled.imageTag}
+          resizeMode="contain"
         />
       </View>
       <View style={styled.contentWrapper}>
-        <TextInput
-          value={password}
-          style={styled.input}
-          placeholder="로그인 비밀번호"
-          onChangeText={data => setPassword(data)}
+        <RHFInput control={control} name="email" label="로그인 아이디" />
+      </View>
+      <View style={styled.contentWrapper}>
+        <RHFInput
+          control={control}
+          name="password"
+          label="비밀번호"
+          secureTextEntry={true}
         />
       </View>
       <View style={styled.buttonWrapper}>
-        <Pressable
-          style={styled.loginBtnWrapper}
-          onPress={handlers.onPressLogin}>
-          <Text style={styled.buttonText}>로그인</Text>
-        </Pressable>
-        <Pressable style={styled.joinBtnWrapper} onPress={handlers.onPressJoin}>
-          <Text style={styled.buttonText}>회원가입</Text>
-        </Pressable>
+        <Button
+          label="로그인"
+          onPress={handleSubmit(handlers.onPressLogin)}
+          btnStyle={styled.loginBtn}
+        />
+
+        <Button
+          label="회원가입"
+          onPress={handlers.onPressJoin}
+          btnStyle={styled.joinBtn}
+        />
       </View>
     </KeyboardAwareScrollView>
   );
 }
 
 const styled = StyleSheet.create({
-  container: {marginVertical: 130},
+  imageWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 30,
+  },
+  imageTag: {
+    width: 280,
+    height: 150,
+  },
   contentWrapper: {
     marginVertical: 20,
     paddingHorizontal: 30,
   },
-  label: {
-    fontSize: 25,
-    fontWeight: '600',
-  },
-  input: {
-    fontSize: 21,
-
-    color: 'grey',
-    borderBottomWidth: 1,
-  },
   buttonWrapper: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     flexDirection: 'row',
-    marginVertical: 20,
     paddingHorizontal: 30,
     gap: 10,
   },
-  loginBtnWrapper: {
-    flex: 1,
-    backgroundColor: '#4F709C',
-    alignItems: 'center',
-    paddingVertical: 18,
-    borderRadius: 15,
-  },
-  joinBtnWrapper: {
-    flex: 1,
-    backgroundColor: '#FF8551',
-    alignItems: 'center',
-    paddingVertical: 18,
-    borderRadius: 15,
-  },
-  buttonText: {
-    fontSize: 21,
-    color: '#FAF0E4',
-  },
+  loginBtn: {backgroundColor: '#4F709C'},
+  joinBtn: {backgroundColor: '#FF8551'},
 });
 
 export default Login;

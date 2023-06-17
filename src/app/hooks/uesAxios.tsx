@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import axios from 'axios';
 import {Platform} from 'react-native';
-import useUser from './useAuth';
+import useAuth from './useAuth';
 
 export const BASE_URL =
   Platform.OS === 'android' ? 'http://10.0.2.2:8888' : 'http://localhost:8888';
@@ -9,16 +9,19 @@ export const BASE_URL =
 export const api = axios.create({
   baseURL: BASE_URL,
   timeout: 100000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 export default function useAxios() {
-  const {user} = useUser();
+  const {token} = useAuth();
 
   const handlers = {
     onRequest: async (config: any) => {
       // 토큰
-      if (user?.token) {
-        config.headers['authorization'] = user.token;
+      if (token) {
+        config.headers['authorization'] = token;
       }
 
       return config;
