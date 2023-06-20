@@ -1,4 +1,5 @@
-import {api} from '../hooks/uesAxios';
+import {UpdateUserInput} from '../../pages/tools/UpdateUser';
+import {api} from '../hooks/useAxios';
 
 interface LoginData {
   email: string;
@@ -10,6 +11,7 @@ export interface JoinData {
   email: string;
   password: string;
 }
+
 export const loginUser = (data: LoginData) => {
   return api({
     url: '/users/login',
@@ -19,10 +21,18 @@ export const loginUser = (data: LoginData) => {
 };
 
 export const joinUser = (data: JoinData) => {
-  console.log(data);
   return api({
     url: '/users/create',
     method: 'POST',
+    data,
+  });
+};
+
+export const editUser = (data: UpdateUserInput) => {
+  console.log(data);
+  return api({
+    url: '/users/update',
+    method: 'PATCH',
     data,
   });
 };
@@ -31,5 +41,13 @@ export const myProfile = () => {
   return api({
     url: '/users/me',
     method: 'GET',
+  });
+};
+
+export const checkPw = (data: {password: string}) => {
+  return api({
+    url: 'users/password',
+    method: 'POST',
+    data,
   });
 };

@@ -15,7 +15,7 @@ export const api = axios.create({
 });
 
 export default function useAxios() {
-  const {token} = useAuth();
+  const {token, setLogout} = useAuth();
 
   const handlers = {
     onRequest: async (config: any) => {
@@ -30,6 +30,10 @@ export default function useAxios() {
       return response;
     },
     onError: (err: any) => {
+      // 토큰 만료인 경우
+      if (err.response.status === 403) {
+        setLogout();
+      }
       return err;
     },
   };

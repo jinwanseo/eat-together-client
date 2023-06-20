@@ -10,6 +10,7 @@ import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import * as clientAPI from '../app/apis/client';
+
 const JoinSchema = yup.object().shape({
   name: yup.string().min(3, '최소 3글자 이상').max(20, '최대 20글자 미만'),
   email: yup

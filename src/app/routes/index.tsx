@@ -1,9 +1,8 @@
 import * as React from 'react';
-import useAxios from '../hooks/uesAxios';
+import useAxios from '../hooks/useAxios';
 import useAuth from '../hooks/useAuth';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
 import Login from '../../pages/Login';
 import Join from '../../pages/Join';
 import Home from '../../pages/Home';
@@ -19,6 +18,7 @@ export type RootBottomLinks = {
   Home: undefined;
   Order: undefined;
   Setting: undefined;
+  Update: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackLinks>();
@@ -42,8 +42,12 @@ export function StackRoutes() {
 }
 
 export function BottomRoutes() {
+  const navigation = useNavigation();
+  React.useEffect(() => {
+    navigation.navigate('Home');
+  }, []);
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="Home">
       <Tab.Screen name="Home" component={Home} options={{headerShown: false}} />
       <Tab.Screen
         name="Order"

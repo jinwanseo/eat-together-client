@@ -2,7 +2,15 @@ import {useCallback, useEffect} from 'react';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../store';
-import {setToken as setStoreToken} from '../store/slices/authSlice';
+import {
+  initialState as initialTokenState,
+  setToken as setStoreToken,
+} from '../store/slices/authSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  initialState as initialUserState,
+  setUser,
+} from '../store/slices/userSlice';
 
 function useAuth() {
   const dispatch = useDispatch();
@@ -22,13 +30,14 @@ function useAuth() {
   );
 
   const setLogout = useCallback(() => {
+    // 토큰 정보 삭제
     EncryptedStorage.clear();
 
-    dispatch(
-      setStoreToken({
-        token: '',
-      }),
-    );
+    // 유저 정보 삭제
+    AsyncStorage.clear();
+
+    dispatch(setStoreToken(initialTokenState));
+    dispatch(setUser(initialUserState));
   }, [dispatch]);
 
   useEffect(() => {
