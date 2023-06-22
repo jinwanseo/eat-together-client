@@ -1,4 +1,4 @@
-import {UpdateUserInput} from '../../pages/tools/UpdateUser';
+import {UpdateUserInput} from '../../pages/setting/details/UpdateUser';
 import {api} from '../hooks/useAxios';
 
 interface LoginData {

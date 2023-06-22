@@ -11,7 +11,7 @@ interface BtnInterface {
   btnStyle?: any;
 }
 
-export default function Button({
+export default function RButton({
   onPress,
   label,
   textStyle,

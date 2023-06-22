@@ -1,23 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, StyleSheet, Text, View} from 'react-native';
-import Button from '../../components/buttons/Button';
-
-import useAuth from '../../app/hooks/useAuth';
-import useUser from '../../app/hooks/useUser';
 import {format} from 'date-fns';
-import * as clientAPI from '../../app/apis/client';
+import * as clientAPI from '../../../../app/apis/client';
+
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {SettingLinks} from '../Setting';
+import {SettingLinks} from '../SettingRoutes';
+import useAuth from '../../../../app/hooks/useAuth';
+import useUser from '../../../../app/hooks/useUser';
+import RButton from '../../../../components/buttons/RButton';
 
 function Profile() {
   const navigation = useNavigation<NavigationProp<SettingLinks>>();
   const {token, setLogout} = useAuth();
   const {user, setUser} = useUser();
-  const [updateAt, setUpdateAt] = useState();
+  const [updateAt, setUpdateAt] = useState<string>();
 
   const handlers = {
     linkToUpdate: () => {
-      navigation.navigate('Setting', {screen: 'Update'});
+      navigation.navigate('Setting', {
+        screen: 'Update',
+      });
     },
   };
 
@@ -71,18 +73,18 @@ function Profile() {
         </View>
       </View>
       <View style={styles.buttonWrapper}>
-        <Button
+        <RButton
           label="회원 정보 수정"
           onPress={handlers.linkToUpdate}
-          btnStyle={{backgroundColor: '#526D82'}}
+          btnStyle={styles.updateBtn}
         />
-        <Button label="로그아웃 " onPress={setLogout} />
+        <RButton label="로그아웃 " onPress={setLogout} />
       </View>
       <View style={styles.buttonWrapper}>
-        <Button
+        <RButton
           label="회원 탈퇴 😭"
           onPress={handlers.linkToUpdate}
-          btnStyle={{backgroundColor: '#F24C3D'}}
+          btnStyle={styles.cancelBtn}
         />
       </View>
     </View>
@@ -96,7 +98,6 @@ const styles = StyleSheet.create({
   pageWrapper: {
     flex: 1,
     gap: 10,
-    marginTop: 30,
     padding: 30,
   },
   contentWrapper: {
@@ -131,10 +132,11 @@ const styles = StyleSheet.create({
   moneyTextTitle: {fontWeight: '800', fontSize: 21},
   moneyTextValue: {fontWeight: '900', fontSize: 29},
   moneyTextMemo: {fontWeight: '400', fontSize: 13, color: 'grey'},
-
   buttonWrapper: {
     flexDirection: 'row',
 
     gap: 10,
   },
+  updateBtn: {backgroundColor: '#526D82'},
+  cancelBtn: {backgroundColor: '#F24C3D'},
 });

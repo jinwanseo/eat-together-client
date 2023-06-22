@@ -1,15 +1,15 @@
 import * as React from 'react';
-import FullLogoImg from '../asset/images/logo_full.png';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {Alert, Image, StyleSheet, View} from 'react-native';
-import {RootStackLinks} from '../app/routes';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import RHFInput from '../components/forms/RHFInput';
-import Button from '../components/buttons/Button';
 import {useForm} from 'react-hook-form';
+import FullLogoImg from '../../../asset/images/logo_full.png';
+import {RootStackLinks} from '../LoginRoutes';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import RHFInput from '../../../components/forms/RHFInput';
+import RButton from '../../../components/buttons/RButton';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import * as clientAPI from '../app/apis/client';
+import * as clientAPI from '../../../app/apis/client';
 
 const JoinSchema = yup.object().shape({
   name: yup.string().min(3, '최소 3글자 이상').max(20, '최대 20글자 미만'),
@@ -81,11 +81,11 @@ function Join() {
       </View>
 
       <View style={styled.buttonWrapper}>
-        <Button
+        <RButton
           label="로그인 페이지로 이동"
           onPress={() => navigation.navigate('Login')}
         />
-        <Button
+        <RButton
           label="회원가입완료"
           onPress={handleSubmit(handlers.onSubmit)}
           btnStyle={styled.loginBtn}

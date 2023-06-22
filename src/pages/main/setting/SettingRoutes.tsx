@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import Profile from './tools/Profile';
-import Update from './Update';
+import Profile from './details/Profile';
+import Update from './details/Update';
 
 export type SettingLinks = {
   Profile: undefined;
@@ -9,7 +9,7 @@ export type SettingLinks = {
 };
 const Stack = createNativeStackNavigator<SettingLinks>();
 
-export default function Setting() {
+function SettingRoutes() {
   return (
     <Stack.Navigator initialRouteName="Profile">
       <Stack.Screen
@@ -25,3 +25,5 @@ export default function Setting() {
     </Stack.Navigator>
   );
 }
+
+export default SettingRoutes;

@@ -1,15 +1,16 @@
 import * as React from 'react';
-import FullLogoImg from '../../asset/images/logo_full.png';
+import FullLogoImg from '../../../../../asset/images/logo_full.png';
 import {Alert, Image, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import RHFInput from '../../components/forms/RHFInput';
-import Button from '../../components/buttons/Button';
+import RHFInput from '../../../../../components/forms/RHFInput';
+import RButton from '../../../../../components/buttons/RButton';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import * as clientAPI from '../../app/apis/client';
-import useUser from '../../app/hooks/useUser';
+import * as clientAPI from '../../../../../app/apis/client';
+
 import {useNavigation} from '@react-navigation/native';
+import useUser from '../../../../../app/hooks/useUser';
 
 export interface UpdateUserInput {
   name?: string | undefined;
@@ -95,7 +96,7 @@ function UpdateUser() {
       </View>
 
       <View style={styled.contentWrapper}>
-        <Button
+        <RButton
           label={`비밀번호 변경${pwChangeMode ? ' 취소' : ''}`}
           onPress={handlers.onPressPwChangeBtn}
           btnStyle={[
@@ -127,12 +128,8 @@ function UpdateUser() {
       )}
 
       <View style={styled.buttonWrapper}>
-        <Button
-          label="변경 취소"
-          onPress={handlers.onPressCancel}
-          btnStyle={styled.loginBtn}
-        />
-        <Button
+        <RButton label="변경 취소" onPress={handlers.onPressCancel} />
+        <RButton
           label="회원정보변경"
           onPress={handleSubmit(handlers.onSubmit)}
           btnStyle={styled.loginBtn}
@@ -150,7 +147,6 @@ const styled = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 20,
-    marginTop: 30,
   },
   imageTag: {
     width: 280,
