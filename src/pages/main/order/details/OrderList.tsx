@@ -1,7 +1,8 @@
 import React, {useCallback, useState} from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import useSocket from '../../../../app/hooks/useSocket';
+// import useSocket from '../../../../app/hooks/useSocket';
 import RButton from '../../../../components/buttons/RButton';
+import MapView from 'react-native-maps';
 
 interface IOrderItem {
   onPressItem: (id: number) => void;
@@ -40,7 +41,18 @@ function OrderItem(item: IOrder & IOrderItem) {
       </View>
       {item.isActive && (
         <View style={{gap: 10}}>
-          <Text>이곳에 지도 표시</Text>
+          <View style={{height: 300}}>
+            <MapView
+              style={{width: '100%', height: '100%'}}
+              initialRegion={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+            />
+          </View>
+
           <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
             <RButton
               label="수락"
@@ -114,6 +126,15 @@ export default function OrderList() {
   // }, [token, disconnect]);
   return (
     <View style={styles.items}>
+      {/* <MapView
+        style={{width: '100%', height: '100%'}}
+        initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      /> */}
       <FlatList
         data={items}
         keyExtractor={(item: IOrder) => item.id + '_'}
