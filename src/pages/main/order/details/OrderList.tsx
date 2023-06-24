@@ -1,8 +1,10 @@
 import React, {useCallback, useState} from 'react';
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Pressable, StyleSheet, View} from 'react-native';
 // import useSocket from '../../../../app/hooks/useSocket';
-import RButton from '../../../../components/buttons/RButton';
-import MapView from 'react-native-maps';
+
+import ItemTItle from './tools/ItemTitle';
+import MiniMap from './tools/MiniMap';
+import ItemBottomBtns from './tools/ItemBottomBtns';
 
 interface IOrderItem {
   onPressItem: (id: number) => void;
@@ -20,51 +22,11 @@ function OrderItem(item: IOrder & IOrderItem) {
     <Pressable
       style={styles.itemWrapper}
       onPress={() => item.onPressItem(item.id)}>
-      <View style={styles.item}>
-        <View style={styles.location}>
-          <Text style={[styles.firstTxt, styles.fontColor]}>출발지</Text>
-          <Text style={[styles.secondTxt, styles.fontColor]}>:</Text>
-          <Text style={[styles.thirdTxt, styles.fontColor]}>
-            {item.startAdd}
-          </Text>
-        </View>
-        <View style={styles.location}>
-          <Text style={[styles.firstTxt, styles.fontColor]}>목적지</Text>
-          <Text style={[styles.secondTxt, styles.fontColor]}>:</Text>
-          <Text style={[styles.thirdTxt, styles.fontColor]}>{item.endAdd}</Text>
-        </View>
-        <View style={styles.location}>
-          <Text style={[styles.firstTxt, styles.fontColor]}>수수료</Text>
-          <Text style={[styles.secondTxt, styles.fontColor]}>:</Text>
-          <Text style={[styles.thirdTxt, styles.fontColor]}>{item.pay}원</Text>
-        </View>
-      </View>
+      <ItemTItle {...item} />
       {item.isActive && (
         <View style={{gap: 10}}>
-          <View style={{height: 300}}>
-            <MapView
-              style={{width: '100%', height: '100%'}}
-              initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-            />
-          </View>
-
-          <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
-            <RButton
-              label="수락"
-              textStyle={{fontSize: 13}}
-              btnStyle={{backgroundColor: '#1FAB89'}}
-            />
-            <RButton
-              label="거절"
-              textStyle={{fontSize: 13}}
-              btnStyle={{backgroundColor: '#F29727'}}
-            />
-          </View>
+          <MiniMap />
+          <ItemBottomBtns />
         </View>
       )}
     </Pressable>
@@ -126,15 +88,6 @@ export default function OrderList() {
   // }, [token, disconnect]);
   return (
     <View style={styles.items}>
-      {/* <MapView
-        style={{width: '100%', height: '100%'}}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      /> */}
       <FlatList
         data={items}
         keyExtractor={(item: IOrder) => item.id + '_'}
@@ -156,36 +109,11 @@ const styles = StyleSheet.create({
     padding: 30,
   },
   itemWrapper: {
-    // backgroundColor: '#B8B0B0',
     borderColor: '#B8B0B0',
     borderWidth: 2,
     padding: 23,
     borderRadius: 11,
     gap: 10,
     marginBottom: 10,
-  },
-  item: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  location: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-  },
-  firstTxt: {
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  secondTxt: {
-    fontSize: 10,
-  },
-  thirdTxt: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  fontColor: {
-    color: '#1E2022',
   },
 });
