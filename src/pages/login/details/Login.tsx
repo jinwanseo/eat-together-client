@@ -6,7 +6,7 @@ import {RootStackLinks} from '../LoginRoutes';
 import * as loginAPI from '../../../app/apis/client';
 import RHFInput from '../../../components/forms/RHFInput';
 import {useForm} from 'react-hook-form';
-import FullLogoImg from '../../../asset/images/logo_full.png';
+
 import RButton from '../../../components/buttons/RButton';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -56,7 +56,7 @@ function Login() {
     <KeyboardAwareScrollView>
       <View style={styled.imageWrapper}>
         <Image
-          source={FullLogoImg}
+          source={require('../../../asset/images/logo_full.png')}
           style={styled.imageTag}
           resizeMode="contain"
         />

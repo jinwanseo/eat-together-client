@@ -1,5 +1,5 @@
 import * as React from 'react';
-import FullLogoImg from '../../../../../asset/images/logo_full.png';
+
 import {Alert, Image, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import RHFInput from '../../../../../components/forms/RHFInput';
@@ -83,7 +83,7 @@ function UpdateUser() {
     <KeyboardAwareScrollView>
       <View style={styled.imageWrapper}>
         <Image
-          source={FullLogoImg}
+          source={require('../../../../../asset/images/logo_full.png')}
           style={styled.imageTag}
           resizeMode="contain"
         />

@@ -2,7 +2,6 @@ import * as React from 'react';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {Alert, Image, StyleSheet, View} from 'react-native';
 import {useForm} from 'react-hook-form';
-import FullLogoImg from '../../../asset/images/logo_full.png';
 import {RootStackLinks} from '../LoginRoutes';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import RHFInput from '../../../components/forms/RHFInput';
@@ -52,7 +51,7 @@ function Join() {
     <KeyboardAwareScrollView>
       <View style={styled.imageWrapper}>
         <Image
-          source={FullLogoImg}
+          source={require('../../../asset/images/logo_full.png')}
           style={styled.imageTag}
           resizeMode="contain"
         />
