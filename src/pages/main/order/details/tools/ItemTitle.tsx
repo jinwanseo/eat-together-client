@@ -1,27 +1,28 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {LocationType} from '../OrderList';
 
 interface ItemTitleProps {
-  startAdd: string;
-  endAdd: string;
+  start: LocationType;
+  end: LocationType;
   pay: number;
 }
 
 /**
  * @title 각 카드 타이틀 (출발지, 목적지, 수수료)
  */
-function ItemTItle({startAdd, endAdd, pay}: ItemTitleProps) {
+function ItemTitle({start, end, pay}: ItemTitleProps) {
   return (
     <View style={styles.item}>
       <View style={styles.location}>
         <Text style={[styles.firstTxt, styles.fontColor]}>출발지</Text>
         <Text style={[styles.secondTxt, styles.fontColor]}>:</Text>
-        <Text style={[styles.thirdTxt, styles.fontColor]}>{startAdd}</Text>
+        <Text style={[styles.thirdTxt, styles.fontColor]}>{start.name}</Text>
       </View>
       <View style={styles.location}>
         <Text style={[styles.firstTxt, styles.fontColor]}>목적지</Text>
         <Text style={[styles.secondTxt, styles.fontColor]}>:</Text>
-        <Text style={[styles.thirdTxt, styles.fontColor]}>{endAdd}</Text>
+        <Text style={[styles.thirdTxt, styles.fontColor]}>{end.name}</Text>
       </View>
       <View style={styles.location}>
         <Text style={[styles.firstTxt, styles.fontColor]}>수수료</Text>
@@ -58,4 +59,4 @@ const styles = StyleSheet.create({
     color: '#1E2022',
   },
 });
-export default ItemTItle;
+export default ItemTitle;

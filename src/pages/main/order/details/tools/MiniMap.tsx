@@ -1,19 +1,26 @@
 import {StyleSheet, View} from 'react-native';
 import React from 'react';
-import MapView from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
+import {IOrder} from '../OrderList';
 
-export default function MiniMap() {
+export default function MiniMap({start, end}: IOrder) {
+  console.log(start, end, +start.latitude);
+
   return (
     <View style={styles.mapContainer}>
-      <MapView
-        style={styles.mapView}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      />
+      <MapView style={styles.mapView}>
+        <Marker
+          title={start.name}
+          description={'출발지'}
+          coordinate={{latitude: +start.latitude, longitude: +start.longitude}}
+        />
+
+        <Marker
+          title={end.name}
+          description={'도착지'}
+          coordinate={{latitude: +end.latitude, longitude: +end.longitude}}
+        />
+      </MapView>
     </View>
   );
 }

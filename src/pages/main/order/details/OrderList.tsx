@@ -1,31 +1,33 @@
-import React, {useCallback, useState} from 'react';
-import {FlatList, Pressable, StyleSheet, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  Alert,
+  FlatList,
+  ListRenderItemInfo,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
+import * as orderAPI from '../../../../app/apis/order';
 // import useSocket from '../../../../app/hooks/useSocket';
 
-import ItemTItle from './tools/ItemTitle';
+import ItemTitle from './tools/ItemTitle';
 import MiniMap from './tools/MiniMap';
 import ItemBottomBtns from './tools/ItemBottomBtns';
 
-interface IOrderItem {
-  onPressItem: (id: number) => void;
+type OrderItemProps = IOrder & {
   isActive: boolean;
-}
-interface IOrder {
-  id: number;
-  startAdd: string;
-  endAdd: string;
-  pay: number;
-}
+  onPressItem: (id: number) => void;
+};
 
-function OrderItem(item: IOrder & IOrderItem) {
+function OrderItem(item: OrderItemProps) {
   return (
     <Pressable
       style={styles.itemWrapper}
       onPress={() => item.onPressItem(item.id)}>
-      <ItemTItle {...item} />
+      <ItemTitle {...item} />
       {item.isActive && (
         <View style={{gap: 10}}>
-          <MiniMap />
+          <MiniMap {...item} />
           <ItemBottomBtns />
         </View>
       )}
@@ -33,28 +35,39 @@ function OrderItem(item: IOrder & IOrderItem) {
   );
 }
 
-const items: IOrder[] = [
-  {
-    id: 1,
-    startAdd: '삼성동',
-    endAdd: '반포동',
-    pay: 8000,
-  },
-  {
-    id: 2,
-    startAdd: '압구정',
-    endAdd: '신사동',
-    pay: 8000,
-  },
-  {
-    id: 3,
-    startAdd: '청담동',
-    endAdd: '여의도동',
-    pay: 8000,
-  },
-];
+export interface LocationType {
+  name: string;
+  latitude: string;
+  longitude: string;
+}
+
+export interface IOrder {
+  id: number;
+  pay: number;
+  start: LocationType;
+  end: LocationType;
+  state: string;
+}
 
 export default function OrderList() {
+  const [orderList, setOrderList] = useState<IOrder[]>([]);
+
+  useEffect(() => {
+    // 주문 리스트 GET
+    const getItems = async () => {
+      try {
+        const {data} = await orderAPI.getOrderList();
+        if (data?.ok) return setOrderList(data?.results);
+      } catch (error) {
+        return Alert.alert(
+          '조회 실패',
+          '주문정보 불러오기를 실패했습니다. 앱을 다시 실행해주세요',
+        );
+      }
+    };
+    getItems();
+  }, []);
+
   const [activeCard, setActiveCard] = useState<number | null>(null);
 
   const handlers = {
@@ -64,34 +77,13 @@ export default function OrderList() {
       });
     }, []),
   };
-  // const [socket, disconnect] = useSocket();
-  // const {token} = useAuth();
 
-  // useEffect(() => {
-  //   if (socket && token) {
-  //     socket.emit('order', {data: 'order'});
-
-  //     socket.on('order', ({data}) => appendOrderList(data));
-  //   }
-  //   return () => {
-  //     if (socket) {
-  //       socket.off('order', ({data}) => appendOrderList(data));
-  //     }
-  //   };
-  // }, [token, socket, appendOrderList]);
-
-  // useEffect(() => {
-  //   if (!token) {
-  //     console.log('!isLoggedIn', !token);
-  //     disconnect();
-  //   }
-  // }, [token, disconnect]);
   return (
     <View style={styles.items}>
       <FlatList
-        data={items}
-        keyExtractor={(item: IOrder) => item.id + '_'}
-        renderItem={({item}) => (
+        data={orderList}
+        keyExtractor={(item: IOrder) => `order-${item.id}`}
+        renderItem={({item}: ListRenderItemInfo<IOrder>) => (
           <OrderItem
             {...item}
             onPressItem={handlers.onPressItem}

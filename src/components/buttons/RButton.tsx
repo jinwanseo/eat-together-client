@@ -1,5 +1,7 @@
 import React from 'react';
 import {GestureResponderEvent, Pressable, StyleSheet, Text} from 'react-native';
+import {styled} from 'styled-components/native';
+
 interface BtnInterface {
   label: string;
   onPress?:
@@ -30,7 +32,6 @@ export default function RButton({
     </Pressable>
   );
 }
-
 const styles = StyleSheet.create({
   btnContainer: {
     flex: 1,
@@ -48,3 +49,38 @@ const styles = StyleSheet.create({
     color: '#FAF0E4',
   },
 });
+
+const Container = styled.View`
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px 30px;
+`;
+
+const ItemButton = styled.Pressable`
+  justify-content: center;
+  align-items: center;
+  background-color: ${props => props.bgColor ?? 'grey'};
+  padding: 15px;
+  border-radius: 10px;
+`;
+
+const ItemBtnText = styled.Text`
+  color: ${props => props.txtColor ?? 'white'};
+`;
+
+interface ICButton {
+  label: string;
+  onPress: () => void;
+  btnColor?: string;
+  txtColor?: string;
+}
+
+export function CButton({label, onPress, btnColor, txtColor}: ICButton) {
+  return (
+    <Container>
+      <ItemButton onPress={onPress} {...(btnColor && {btnColor})}>
+        <ItemBtnText {...(txtColor && {txtColor})}>{label}</ItemBtnText>
+      </ItemButton>
+    </Container>
+  );
+}

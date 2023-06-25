@@ -32,7 +32,7 @@ export default function useAxios() {
     onError: (err: any) => {
       // 토큰 만료인 경우
       if (err.response.status === 403) {
-        setLogout();
+        return setLogout();
       }
       return err;
     },
