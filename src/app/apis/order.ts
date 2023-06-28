@@ -6,3 +6,11 @@ export const getOrderList = () => {
     url: '/orders/list',
   });
 };
+
+export const createOrder = data => {
+  return api({
+    method: 'POST',
+    url: '/orders',
+    data,
+  });
+};
