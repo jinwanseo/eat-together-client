@@ -1,8 +1,17 @@
 import {StyleSheet, View} from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import RButton from '../../../../../components/buttons/RButton';
+import useOrder from '../../../../../app/hooks/useOrder';
+import {IOrder} from '../../../../../app/store/slices/orderSlice';
 
-export default function ItemBottomBtns() {
+export default function ItemBottomBtns({id, ...others}: IOrder) {
+  const {removeOrder} = useOrder();
+
+  const handlers = {
+    onClickReject: useCallback(() => {
+      removeOrder(id);
+    }, [removeOrder, id]),
+  };
   return (
     <View style={styles.btnWrapper}>
       <RButton
@@ -14,6 +23,7 @@ export default function ItemBottomBtns() {
         label="거절"
         textStyle={styles.btnTxtStyle}
         btnStyle={styles.btnStyle}
+        onPress={handlers.onClickReject}
       />
     </View>
   );

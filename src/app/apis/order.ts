@@ -7,7 +7,7 @@ export const getOrderList = () => {
   });
 };
 
-export const createOrder = data => {
+export const createOrder = (data: any) => {
   return api({
     method: 'POST',
     url: '/orders',

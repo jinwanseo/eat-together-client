@@ -4,14 +4,17 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {CButton} from '../../../../../components/buttons/RButton';
 import {styled} from 'styled-components/native';
 import * as orderAPI from '../../../../../app/apis/order';
-import {useNavigation} from '@react-navigation/native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {Alert} from 'react-native';
+import useSocket from '../../../../../app/hooks/useSocket';
 const FormWrapper = styled.View`
   flex-direction: column;
   gap: 15px;
 `;
 
 export default function OrderSendForm({methods, setOpen}: any) {
-  const navigator = useNavigation();
+  const [socket] = useSocket();
+  const navigator: NavigationProp<any> = useNavigation();
   const {control, setValue, getValues} = methods;
   const handlers = {
     onPressStartAddressBtn: () => {
@@ -21,6 +24,25 @@ export default function OrderSendForm({methods, setOpen}: any) {
     onPressEndAddressBtn: () => {
       setValue('type', 'endAddress');
       setOpen(true);
+    },
+    onSubmit: async () => {
+      //여기서 주문 정보 업로드
+      const {startAddress, endAddress, startCity, endCity, pay} = getValues();
+      const res = await orderAPI.createOrder({
+        startAddress,
+        endAddress,
+        startCity,
+        endCity,
+        pay: +pay,
+      });
+      if (res.status >= 300) {
+        return Alert.alert(
+          '주문 신청 중 에러 발생',
+          '잠시 후 다시 시도해주세요',
+        );
+      }
+
+      navigator.navigate('Order', {screen: 'OrderList'});
     },
   };
   return (
@@ -52,24 +74,7 @@ export default function OrderSendForm({methods, setOpen}: any) {
           placeholder="수수료를 입력해주세요"
         />
 
-        <CButton
-          label="주문하기"
-          onPress={async () => {
-            //여기서 주문 정보 업로드
-            const {startAddress, endAddress, startCity, endCity, pay} =
-              getValues();
-            const res = await orderAPI.createOrder({
-              startAddress,
-              endAddress,
-              startCity,
-              endCity,
-              pay: +pay,
-            });
-            if (res.status >= 200 && res.status < 300) {
-              // navigator.navigate('OrderList');
-            }
-          }}
-        />
+        <CButton label="주문하기" onPress={handlers.onSubmit} />
       </FormWrapper>
     </KeyboardAwareScrollView>
   );

@@ -17,5 +17,6 @@ export default function useSocket(): [Socket | undefined, () => void] {
       transports: ['websocket'],
     });
   }
+
   return [socket, disconnect];
 }

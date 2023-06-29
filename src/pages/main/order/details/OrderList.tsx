@@ -3,61 +3,32 @@ import {
   Alert,
   FlatList,
   ListRenderItemInfo,
-  Pressable,
   StyleSheet,
   View,
 } from 'react-native';
 import * as orderAPI from '../../../../app/apis/order';
-// import useSocket from '../../../../app/hooks/useSocket';
+import OrderItem from './tools/OrderItem';
+import {styled} from 'styled-components/native';
+import useSocket from '../../../../app/hooks/useSocket';
+import {IOrder} from '../../../../app/store/slices/orderSlice';
+import useOrder from '../../../../app/hooks/useOrder';
 
-import ItemTitle from './tools/ItemTitle';
-import MiniMap from './tools/MiniMap';
-import ItemBottomBtns from './tools/ItemBottomBtns';
-
-type OrderItemProps = IOrder & {
-  isActive: boolean;
-  onPressItem: (id: number) => void;
-};
-
-function OrderItem(item: OrderItemProps) {
-  return (
-    <Pressable
-      style={styles.itemWrapper}
-      onPress={() => item.onPressItem(item.id)}>
-      <ItemTitle {...item} />
-      {item.isActive && (
-        <View style={{gap: 10}}>
-          <MiniMap {...item} />
-          <ItemBottomBtns />
-        </View>
-      )}
-    </Pressable>
-  );
-}
-
-export interface LocationType {
-  name: string;
-  latitude: string;
-  longitude: string;
-}
-
-export interface IOrder {
-  id: number;
-  pay: number;
-  start: LocationType;
-  end: LocationType;
-  state: string;
-}
+const OrderItems = styled(View)`
+  flex: 1;
+`;
 
 export default function OrderList() {
-  const [orderList, setOrderList] = useState<IOrder[]>([]);
+  const [socket, disconnect] = useSocket();
+  const {orderList, setOrderList, addOrder} = useOrder();
 
   useEffect(() => {
     // 주문 리스트 GET
     const getItems = async () => {
       try {
         const {data} = await orderAPI.getOrderList();
-        if (data?.ok) return setOrderList(data?.results);
+        if (data?.ok) {
+          setOrderList(data?.results);
+        }
       } catch (error) {
         return Alert.alert(
           '조회 실패',
@@ -65,7 +36,11 @@ export default function OrderList() {
         );
       }
     };
+
+    socket?.on('order', ({data}) => addOrder(data));
     getItems();
+
+    return () => disconnect();
   }, []);
 
   const [activeCard, setActiveCard] = useState<number | null>(null);
@@ -79,7 +54,7 @@ export default function OrderList() {
   };
 
   return (
-    <View style={styles.items}>
+    <OrderItems>
       <FlatList
         data={orderList}
         keyExtractor={(item: IOrder) => `order-${item.id}`}
@@ -90,22 +65,11 @@ export default function OrderList() {
             isActive={item.id === activeCard}
           />
         )}
+        style={styles.flatList}
       />
-    </View>
+    </OrderItems>
   );
 }
-
 const styles = StyleSheet.create({
-  items: {
-    flex: 1,
-    padding: 30,
-  },
-  itemWrapper: {
-    borderColor: '#B8B0B0',
-    borderWidth: 2,
-    padding: 23,
-    borderRadius: 11,
-    gap: 10,
-    marginBottom: 10,
-  },
+  flatList: {padding: 30},
 });

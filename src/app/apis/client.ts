@@ -29,7 +29,7 @@ export const joinUser = (data: JoinData) => {
 };
 
 export const editUser = (data: UpdateUserInput) => {
-  console.log(data);
+
   return api({
     url: '/users/update',
     method: 'PATCH',
