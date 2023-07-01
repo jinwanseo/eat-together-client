@@ -37,8 +37,13 @@ export default function MiniMap({start, end}: IOrder) {
       <StyledMapContainer>
         <StyledMapView
           ref={mapRef}
-          onMapReady={() => {
-            centerMap();
+          onMapReady={centerMap}
+          onMapLoaded={centerMap}
+          region={{
+            latitude: +start.latitude,
+            longitude: +start.longitude,
+            latitudeDelta: 0.3,
+            longitudeDelta: 0.3,
           }}>
           <Marker
             title={start.name}

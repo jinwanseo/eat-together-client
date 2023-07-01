@@ -38,6 +38,7 @@ function Profile() {
   return (
     <View style={styles.pageWrapper}>
       <View style={styles.contentWrapper}>
+        {/* 프로필 */}
         <View style={styles.cardWrapper}>
           <View style={styles.textWrapper}>
             <Text style={styles.textLabel}>가입자명</Text>
@@ -58,10 +59,10 @@ function Profile() {
             </Text>
           </View>
         </View>
-
+        {/* 보유캐시 */}
         <View style={styles.moneyCardWrapper}>
           <View>
-            <Text style={styles.moneyTextTitle}>보유 잔액</Text>
+            <Text style={styles.moneyTextTitle}>보유 캐시</Text>
           </View>
           <View>
             <Text style={styles.moneyTextValue}>
@@ -72,21 +73,22 @@ function Profile() {
             <Text style={styles.moneyTextMemo}>{updateAt}</Text>
           </View>
         </View>
-      </View>
-      <View style={styles.buttonWrapper}>
-        <RButton
-          label="회원 정보 수정"
-          onPress={handlers.linkToUpdate}
-          btnStyle={styles.updateBtn}
-        />
-        <RButton label="로그아웃 " onPress={setLogout} />
-      </View>
-      <View style={styles.buttonWrapper}>
-        <RButton
-          label="회원 탈퇴 😭"
-          onPress={handlers.linkToUpdate}
-          btnStyle={styles.cancelBtn}
-        />
+        {/* 버튼 */}
+        <View style={styles.buttonWrapper}>
+          <RButton
+            label="회원 정보 수정"
+            onPress={handlers.linkToUpdate}
+            btnStyle={styles.updateBtn}
+          />
+          <RButton label="로그아웃 " onPress={setLogout} />
+        </View>
+        <View style={styles.buttonWrapper}>
+          <RButton
+            label="회원 탈퇴 😭"
+            onPress={handlers.linkToUpdate}
+            btnStyle={styles.cancelBtn}
+          />
+        </View>
       </View>
     </View>
   );
@@ -99,7 +101,7 @@ const styles = StyleSheet.create({
   pageWrapper: {
     flex: 1,
     gap: 10,
-    padding: 30,
+    padding: 20,
   },
   contentWrapper: {
     flex: 1,
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
   cardWrapper: {
     borderColor: '#9BABB830',
     borderWidth: 2,
-    gap: 30,
+    gap: 10,
     padding: 15,
     paddingVertical: 45,
     borderRadius: 22,
