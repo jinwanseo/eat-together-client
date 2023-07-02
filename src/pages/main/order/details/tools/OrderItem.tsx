@@ -6,7 +6,8 @@ import ItemBottomBtns from './ItemBottomBtns';
 import {styled} from 'styled-components/native';
 import {IOrder} from '../../../../../app/store/slices/orderSlice';
 
-type OrderItemProps = IOrder & {
+type OrderItemProps = {
+  item: IOrder;
   isActive: boolean;
   onPressItem: (id: number) => void;
 };
@@ -24,11 +25,11 @@ const StyledOrderDetail = styled(View)`
   gap: 10px;
 `;
 
-function OrderItem(item: OrderItemProps) {
+function OrderItem({item, onPressItem, isActive}: OrderItemProps) {
   return (
-    <StyledPressable onPress={() => item.onPressItem(item.id)}>
+    <StyledPressable onPress={() => onPressItem(item.id)}>
       <ItemTitle {...item} />
-      {item.isActive && (
+      {isActive && (
         <StyledOrderDetail>
           <MiniMap {...item} />
           <ItemBottomBtns {...item} />

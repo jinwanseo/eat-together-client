@@ -18,9 +18,23 @@ const OrderItems = styled(View)`
 `;
 
 export default function OrderList() {
-  const [socket, disconnect] = useSocket();
+  const [socket] = useSocket();
   const {orderList, setOrderList, addOrder} = useOrder();
 
+  // 실시간 데이터 GET
+  useEffect(() => {
+    const addOrderCallback = ({data}: {data: IOrder}) => addOrder(data);
+    if (socket) {
+      socket?.on('order', addOrderCallback);
+    }
+    return () => {
+      if (socket) {
+        socket.off('order', addOrderCallback);
+      }
+    };
+  }, [socket, addOrder]);
+
+  // 주문 리스트 GET
   useEffect(() => {
     // 주문 리스트 GET
     const getItems = async () => {
@@ -36,12 +50,8 @@ export default function OrderList() {
         );
       }
     };
-
-    socket?.on('order', ({data}) => addOrder(data));
     getItems();
-
-    return () => disconnect();
-  }, []);
+  }, [setOrderList]);
 
   const [activeCard, setActiveCard] = useState<number | null>(null);
 
@@ -60,7 +70,7 @@ export default function OrderList() {
         keyExtractor={(item: IOrder) => `order-${item.id}`}
         renderItem={({item}: ListRenderItemInfo<IOrder>) => (
           <OrderItem
-            {...item}
+            item={item}
             onPressItem={handlers.onPressItem}
             isActive={item.id === activeCard}
           />

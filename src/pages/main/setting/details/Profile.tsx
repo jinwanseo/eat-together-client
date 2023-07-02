@@ -26,7 +26,6 @@ function Profile() {
   useEffect(() => {
     const getProfile = async () => {
       const {data} = await clientAPI.myProfile();
-
       if (!data?.ok) return Alert.alert('통신에러', data?.error);
       setUpdateAt(format(new Date(), 'yyyy년 MM월 dd일 HH:mm 기준'));
       return setUser(data.result);

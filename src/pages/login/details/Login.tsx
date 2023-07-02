@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Image, StyleSheet, View} from 'react-native';
+import {Alert, Image, StyleSheet, View} from 'react-native';
 import {RootStackLinks} from '../LoginRoutes';
 import * as loginAPI from '../../../app/apis/client';
 import RHFInput from '../../../components/forms/RHFInput';
@@ -33,20 +33,23 @@ function Login() {
   const navigation: NavigationProp<RootStackLinks> = useNavigation();
   const handlers = {
     onPressLogin: async (uploadData: any) => {
-      const {data} = await loginAPI.loginUser(uploadData);
+      try {
+        const res = await loginAPI.loginUser(uploadData);
+        // 로그인 실패시.
+        if (!res?.data?.ok) {
+          return setError('password', {message: res.data.error});
+        }
 
-      // 로그인 실패시.
-      if (!data?.ok) {
-        return setError('password', {message: data.error});
+        // 로그인 성공시
+        // 토큰 저장
+        setToken(res.data.token);
+        const decoded: UserSlice = jwt_decode(res.data.token);
+
+        // 유저 기본 정보 저장
+        setUser(decoded);
+      } catch {
+        Alert.alert('통신 오류', '잠시 후 다시 시도해주세요');
       }
-
-      // 로그인 성공시
-      // 토큰 저장
-      setToken(data.token);
-      const decoded: UserSlice = jwt_decode(data.token);
-
-      // 유저 기본 정보 저장
-      setUser(decoded);
     },
     onPressJoin: () => {
       navigation.navigate('Join');

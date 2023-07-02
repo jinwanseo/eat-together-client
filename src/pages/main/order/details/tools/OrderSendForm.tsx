@@ -6,14 +6,13 @@ import {styled} from 'styled-components/native';
 import * as orderAPI from '../../../../../app/apis/order';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {Alert} from 'react-native';
-import useSocket from '../../../../../app/hooks/useSocket';
+
 const FormWrapper = styled.View`
   flex-direction: column;
   gap: 15px;
 `;
 
 export default function OrderSendForm({methods, setOpen}: any) {
-  const [socket] = useSocket();
   const navigator: NavigationProp<any> = useNavigation();
   const {control, setValue, getValues} = methods;
   const handlers = {

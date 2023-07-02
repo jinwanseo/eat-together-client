@@ -1,9 +1,10 @@
-import {useEffect} from 'react';
+import {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   IOrder,
+  setAcceptList as setStoreAcceptList,
   setOrderList as setStoreOrderList,
 } from '../store/slices/orderSlice';
 
@@ -11,12 +12,15 @@ export default function useOrder() {
   const orderList = useSelector((state: RootState) => state.order?.orderList);
   const dispatch = useDispatch();
 
-  const setOrderList = async (orders: IOrder[]): Promise<void> => {
-    // 리덕스 저장
-    dispatch(setStoreOrderList(orders));
-    // 스토리지 저장
-    await AsyncStorage.setItem('orderList', JSON.stringify(orders));
-  };
+  const setOrderList = useCallback(
+    async (orders: IOrder[]): Promise<void> => {
+      // 리덕스 저장
+      dispatch(setStoreOrderList(orders));
+      // 스토리지 저장
+      await AsyncStorage.setItem('orderList', JSON.stringify(orders));
+    },
+    [dispatch],
+  );
 
   const addOrder = async (order: IOrder): Promise<void> => {
     const orders = JSON.parse(
@@ -25,6 +29,26 @@ export default function useOrder() {
     orders.unshift(order);
     dispatch(setStoreOrderList(orders));
     await AsyncStorage.setItem('orderList', JSON.stringify(orders));
+  };
+
+  const acceptOrder = async (acceptId: number): Promise<void> => {
+    const orders = JSON.parse(
+      (await AsyncStorage.getItem('orderList')) ?? '[]',
+    );
+
+    if (orders?.length) {
+      const orderIdx = orders.findIndex((o: IOrder) => o.id === acceptId);
+      if (orderIdx !== -1 && !!orders[orderIdx]) {
+        // Accept List 갱신
+        const acceptList = JSON.parse(
+          (await AsyncStorage.getItem('acceptList')) ?? '[]',
+        );
+
+        acceptList.push(orders[orderIdx]);
+        dispatch(setStoreAcceptList(acceptList));
+        await AsyncStorage.setItem('acceptList', JSON.stringify(acceptList));
+      }
+    }
   };
 
   const removeOrder = async (removeId: number): Promise<void> => {
@@ -55,12 +79,13 @@ export default function useOrder() {
       }
     };
     initialState();
-  }, [orderList.length, dispatch]);
+  }, [orderList.length, dispatch, setOrderList]);
 
   return {
     orderList,
     setOrderList,
     addOrder,
     removeOrder,
+    acceptOrder,
   };
 }

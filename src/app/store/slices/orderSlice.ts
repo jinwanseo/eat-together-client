@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 export interface LocationType {
   name: string;
@@ -19,21 +19,28 @@ export interface IOrder {
 
 export interface OrderSlice {
   orderList: IOrder[];
+  acceptList: IOrder[];
 }
 
 export const initialState: OrderSlice = {
   orderList: [],
+  acceptList: [],
 };
 
 export const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    setOrderList: (state, action: {payload: IOrder[]}) => {
+    // 주문 리스트
+    setOrderList: (state, action: PayloadAction<IOrder[]>) => {
       state.orderList = action.payload;
+    },
+    // 주문 (수락) 리스트
+    setAcceptList: (state, action: PayloadAction<IOrder[]>) => {
+      state.acceptList = action.payload;
     },
   },
 });
 
-export const {setOrderList} = orderSlice.actions;
+export const {setOrderList, setAcceptList} = orderSlice.actions;
 export default orderSlice.reducer;

@@ -14,3 +14,10 @@ export const createOrder = (data: any) => {
     data,
   });
 };
+
+export const acceptOrder = (orderId: number) => {
+  return api({
+    method: 'GET',
+    url: `/orders/accept/${orderId}`,
+  });
+};
