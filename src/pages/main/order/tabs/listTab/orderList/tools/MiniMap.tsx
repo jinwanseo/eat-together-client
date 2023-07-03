@@ -3,7 +3,7 @@ import React, {MutableRefObject, useCallback, useRef} from 'react';
 import MapView, {Marker} from 'react-native-maps';
 
 import {styled} from 'styled-components/native';
-import {IOrder} from '../../../../../app/store/slices/orderSlice';
+import {IOrder} from '../../../../../../../app/store/slices/orderSlice';
 
 const StyledMapContainer = styled(View)`
   height: 250px;

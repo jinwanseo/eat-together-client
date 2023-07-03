@@ -1,4 +1,4 @@
-import {UpdateUserInput} from '../../pages/setting/details/UpdateUser';
+import {UpdateUserInput} from '../../pages/main/setting/details/update/UpdateUser';
 import {api} from '../hooks/useAxios';
 
 interface LoginData {
@@ -29,7 +29,6 @@ export const joinUser = (data: JoinData) => {
 };
 
 export const editUser = (data: UpdateUserInput) => {
-
   return api({
     url: '/users/update',
     method: 'PATCH',

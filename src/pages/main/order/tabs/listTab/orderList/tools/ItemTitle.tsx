@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {LocationType} from '../OrderList';
+import {LocationType} from '../../../../../../../app/store/slices/orderSlice';
 
 interface ItemTitleProps {
   start: LocationType;

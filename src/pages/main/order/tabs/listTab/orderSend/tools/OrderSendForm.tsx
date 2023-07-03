@@ -1,15 +1,21 @@
 import React from 'react';
-import {RHInput} from '../../../../../components/forms/RHFInput';
+import {RHInput} from '../../../../../../../components/forms/RHFInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {CButton} from '../../../../../components/buttons/RButton';
+import RButton from '../../../../../../../components/buttons/RButton';
 import {styled} from 'styled-components/native';
-import * as orderAPI from '../../../../../app/apis/order';
+import * as orderAPI from '../../../../../../../app/apis/order';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {Alert} from 'react-native';
 
 const FormWrapper = styled.View`
   flex-direction: column;
   gap: 15px;
+`;
+
+const ButtonWrapper = styled.View`
+  flex-direction: row;
+  gap: 10px;
+  padding: 0 30px;
 `;
 
 export default function OrderSendForm({methods, setOpen}: any) {
@@ -23,6 +29,9 @@ export default function OrderSendForm({methods, setOpen}: any) {
     onPressEndAddressBtn: () => {
       setValue('type', 'endAddress');
       setOpen(true);
+    },
+    onLinkList: () => {
+      navigator.navigate('ListTab', {screen: 'OrderList'});
     },
     onSubmit: async () => {
       //여기서 주문 정보 업로드
@@ -41,7 +50,7 @@ export default function OrderSendForm({methods, setOpen}: any) {
         );
       }
 
-      navigator.navigate('Order', {screen: 'OrderList'});
+      navigator.navigate('MyTab');
     },
   };
   return (
@@ -73,7 +82,10 @@ export default function OrderSendForm({methods, setOpen}: any) {
           placeholder="수수료를 입력해주세요"
         />
 
-        <CButton label="주문하기" onPress={handlers.onSubmit} />
+        <ButtonWrapper>
+          <RButton label="돌아가기" onPress={handlers.onLinkList} />
+          <RButton label="주문하기" onPress={handlers.onSubmit} />
+        </ButtonWrapper>
       </FormWrapper>
     </KeyboardAwareScrollView>
   );

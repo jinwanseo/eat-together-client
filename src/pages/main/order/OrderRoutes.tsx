@@ -1,26 +1,31 @@
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import OrderSend from './details/OrderSend';
-import OrderList from './details/OrderList';
+import MyTabRoutes from './tabs/myTab/MyTabRoutes';
+import ListTabRoutes from './tabs/listTab/ListTabRoutes';
+import {useNavigation} from '@react-navigation/native';
 
-type OrderLinks = {
-  OrderList: undefined;
-  OrderSend: undefined;
+export type OrderLinks = {
+  ListTab: undefined;
+  MyTab: undefined;
 };
 const Tab = createMaterialTopTabNavigator<OrderLinks>();
 
 function OrderRoutes() {
+  const navigation = useNavigation();
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="OrderList"
-        component={OrderList}
+        name="ListTab"
+        component={ListTabRoutes}
         options={{title: '주문 리스트'}}
+        listeners={{
+          tabPress: () => navigation.navigate('OrderList'),
+        }}
       />
       <Tab.Screen
-        name="OrderSend"
-        component={OrderSend}
-        options={{title: '주문 신청'}}
+        name="MyTab"
+        component={MyTabRoutes}
+        options={{title: '마이 주문'}}
       />
     </Tab.Navigator>
   );

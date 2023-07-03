@@ -59,7 +59,7 @@ const Container = styled.View`
 const ItemButton = styled.Pressable`
   justify-content: center;
   align-items: center;
-  background-color: ${props => props.bgColor ?? 'grey'};
+  background-color: ${props => props.btnColor ?? 'grey'};
   padding: 15px;
   border-radius: 10px;
 `;

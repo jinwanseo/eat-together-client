@@ -1,9 +1,9 @@
 import {Alert, StyleSheet, View} from 'react-native';
 import React, {useCallback} from 'react';
-import RButton from '../../../../../components/buttons/RButton';
-import useOrder from '../../../../../app/hooks/useOrder';
-import {IOrder} from '../../../../../app/store/slices/orderSlice';
-import * as orderAPI from '../../../../../app/apis/order';
+import RButton from '../../../../../../../components/buttons/RButton';
+import useOrder from '../../../../../../../app/hooks/useOrder';
+import {IOrder} from '../../../../../../../app/store/slices/orderSlice';
+import * as orderAPI from '../../../../../../../app/apis/order';
 
 export default function ItemBottomBtns({id}: IOrder) {
   const {acceptOrder, removeOrder} = useOrder();

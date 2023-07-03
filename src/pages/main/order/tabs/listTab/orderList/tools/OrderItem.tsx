@@ -1,10 +1,10 @@
 import {Pressable, View} from 'react-native';
 import React from 'react';
 import ItemTitle from './ItemTitle';
-import MiniMap from './MiniMap';
+import MiniMap from '../tools/MiniMap';
 import ItemBottomBtns from './ItemBottomBtns';
 import {styled} from 'styled-components/native';
-import {IOrder} from '../../../../../app/store/slices/orderSlice';
+import {IOrder} from '../../../../../../../app/store/slices/orderSlice';
 
 type OrderItemProps = {
   item: IOrder;

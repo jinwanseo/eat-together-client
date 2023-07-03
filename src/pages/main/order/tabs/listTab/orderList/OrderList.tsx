@@ -6,12 +6,16 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import * as orderAPI from '../../../../app/apis/order';
+
+import * as orderAPI from '../../../../../../app/apis/order';
 import OrderItem from './tools/OrderItem';
 import {styled} from 'styled-components/native';
-import useSocket from '../../../../app/hooks/useSocket';
-import {IOrder} from '../../../../app/store/slices/orderSlice';
-import useOrder from '../../../../app/hooks/useOrder';
+import useSocket from '../../../../../../app/hooks/useSocket';
+import {IOrder} from '../../../../../../app/store/slices/orderSlice';
+import useOrder from '../../../../../../app/hooks/useOrder';
+import {CButton} from '../../../../../../components/buttons/RButton';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {ListTabLinks} from '../ListTabRoutes';
 
 const OrderItems = styled(View)`
   flex: 1;
@@ -20,6 +24,7 @@ const OrderItems = styled(View)`
 export default function OrderList() {
   const [socket] = useSocket();
   const {orderList, setOrderList, addOrder} = useOrder();
+  const navigation: NavigationProp<ListTabLinks> = useNavigation();
 
   // 실시간 데이터 GET
   useEffect(() => {
@@ -76,6 +81,13 @@ export default function OrderList() {
           />
         )}
         style={styles.flatList}
+      />
+      <CButton
+        label="주문신청"
+        btnColor="#4A55A2"
+        onPress={() => {
+          navigation.navigate('OrderSend');
+        }}
       />
     </OrderItems>
   );
