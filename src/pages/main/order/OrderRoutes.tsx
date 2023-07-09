@@ -1,8 +1,8 @@
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import MyTabRoutes from './tabs/myTab/MyTabRoutes';
-import ListTabRoutes from './tabs/listTab/ListTabRoutes';
-import {useNavigation} from '@react-navigation/native';
+import ListTabRoutes, {ListTabLinks} from './tabs/listTab/ListTabRoutes';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 
 export type OrderLinks = {
   ListTab: undefined;
@@ -11,7 +11,7 @@ export type OrderLinks = {
 const Tab = createMaterialTopTabNavigator<OrderLinks>();
 
 function OrderRoutes() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<ListTabLinks>>();
   return (
     <Tab.Navigator>
       <Tab.Screen

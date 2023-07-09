@@ -4,6 +4,8 @@ import Home from '../../pages/main/home/Home';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import SettingRoutes from './setting/SettingRoutes';
 import OrderRoutes from './order/OrderRoutes';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export type MainRouteLinks = {
   Home: undefined;
@@ -21,9 +23,45 @@ export function MainRoutes() {
 
   return (
     <Tab.Navigator initialRouteName="Home">
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Order" component={OrderRoutes} />
-      <Tab.Screen name="Setting" component={SettingRoutes} />
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <AntDesign
+              name="home"
+              color={focused ? '#4fa3ff' : '#000000'}
+              size={28}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Order"
+        component={OrderRoutes}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <MaterialIcons
+              name="delivery-dining"
+              color={focused ? '#4fa3ff' : '#000000'}
+              size={28}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Setting"
+        component={SettingRoutes}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <AntDesign
+              name="setting"
+              color={focused ? '#4fa3ff' : '#000000'}
+              size={28}
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }

@@ -9,6 +9,7 @@ export interface LocationType {
 export interface IOrder {
   id: number;
   pay: number;
+  title: string;
   start: LocationType;
   end: LocationType;
   state: string;

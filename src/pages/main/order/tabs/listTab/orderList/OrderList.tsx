@@ -3,25 +3,25 @@ import {
   Alert,
   FlatList,
   ListRenderItemInfo,
+  Pressable,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 
 import * as orderAPI from '../../../../../../app/apis/order';
 import OrderItem from './tools/OrderItem';
-import {styled} from 'styled-components/native';
 import useSocket from '../../../../../../app/hooks/useSocket';
 import {IOrder} from '../../../../../../app/store/slices/orderSlice';
 import useOrder from '../../../../../../app/hooks/useOrder';
 import {CButton} from '../../../../../../components/buttons/RButton';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {ListTabLinks} from '../ListTabRoutes';
-
-const OrderItems = styled(View)`
-  flex: 1;
-`;
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import BaseModal from '../../../../../../components/modals/BaseModal';
 
 export default function OrderList() {
+  const [open, setOpen] = useState<boolean>();
   const [socket] = useSocket();
   const {orderList, setOrderList, addOrder} = useOrder();
   const navigation: NavigationProp<ListTabLinks> = useNavigation();
@@ -62,6 +62,7 @@ export default function OrderList() {
 
   const handlers = {
     onPressItem: useCallback((id: number) => {
+      setOpen(true);
       setActiveCard(before => {
         return before === id ? null : id;
       });
@@ -69,7 +70,7 @@ export default function OrderList() {
   };
 
   return (
-    <OrderItems>
+    <View className="static flex-1 space-y-2 p-3">
       <FlatList
         data={orderList}
         keyExtractor={(item: IOrder) => `order-${item.id}`}
@@ -80,16 +81,21 @@ export default function OrderList() {
             isActive={item.id === activeCard}
           />
         )}
-        style={styles.flatList}
+        // style={styles.flatList}
       />
-      <CButton
-        label="주문신청"
-        btnColor="#4A55A2"
-        onPress={() => {
-          navigation.navigate('OrderSend');
-        }}
-      />
-    </OrderItems>
+      <View className="absolute right-3 bottom-3 rounded-full bg-white">
+        <AntDesign
+          name="pluscircle"
+          size={60}
+          color={'#1B6B93'}
+          className={'rounded-full'}
+          onPress={() => {
+            navigation.navigate('OrderSend');
+          }}
+        />
+      </View>
+      {open && <BaseModal />}
+    </View>
   );
 }
 const styles = StyleSheet.create({

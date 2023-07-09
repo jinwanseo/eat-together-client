@@ -13,6 +13,7 @@ import jwt_decode from 'jwt-decode';
 import useUser from '../../../app/hooks/useUser';
 import {UserSlice} from '../../../app/store/slices/userSlice';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {useColorScheme} from 'nativewind';
 
 const LoginSchema = yup.object().shape({
   email: yup
@@ -23,6 +24,7 @@ const LoginSchema = yup.object().shape({
 });
 
 function Login() {
+  const {colorScheme, toggleColorScheme} = useColorScheme();
   const {setToken} = useAuth();
   const {setUser} = useUser();
   const {handleSubmit, control, setError} = useForm({
@@ -56,8 +58,8 @@ function Login() {
   };
   return (
     <KeyboardAwareScrollView className="flex flex-col w-screen h-screen bg-slate-200/95 dark:bg-slate-900/95 gap-2">
-      <View className="flex flex-col items-center justify-center android:h-[300] ios:h-[340]">
-        <View className="flex flex-row items-center justify-center gap-2">
+      <View className="flex flex-col items-center justify-center android:h-[300] ios:h-[400]">
+        <View className="flex flex-row items-center justify-center space-x-2">
           <Image
             className="h-[45] w-[50]"
             source={require('../../../asset/images/logo_icon.png')}
@@ -81,16 +83,31 @@ function Login() {
             secureTextEntry={true}
           />
         </View>
-        <View className="flex flex-row gap-5 justify-center items-center">
+        <View className="flex flex-row space-x-3 justify-center items-center">
           <Pressable
-            className={'p-5'}
+            className={
+              'flex flex-row px-5 py-4 space-x-3 justify-center items-center bg-emerald-500 dark:bg-emerald-300/95 rounded-lg flex-grow'
+            }
             onPress={handleSubmit(handlers.onPressLogin)}>
-            <AntDesign name="login" color="black" size={24} />
-            <Text>로그인</Text>
+            <View>
+              <AntDesign name="login" size={24} color="#beeadd" />
+            </View>
+            <View>
+              <Text className="text-slate-50">로그인</Text>
+            </View>
           </Pressable>
 
-          <Pressable className="p-5" onPress={handlers.onPressJoin}>
-            <Text>회원가입</Text>
+          <Pressable
+            className={
+              'flex flex-row px-5 py-4 space-x-3 justify-center items-center bg-indigo-500 dark:bg-indigo-300/95 rounded-lg flex-grow'
+            }
+            onPress={handlers.onPressJoin}>
+            <View>
+              <Text className="text-slate-50">회원가입</Text>
+            </View>
+            <View>
+              <AntDesign name="adduser" size={24} color="#beeadd" />
+            </View>
           </Pressable>
         </View>
       </View>

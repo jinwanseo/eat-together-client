@@ -32,7 +32,7 @@ export default function RHFInput({name, label, control, ...props}: IRHFInput) {
       control={control}
       name={name}
       render={({field, fieldState}) => (
-        <View className="flex flex-col gap-3">
+        <View className="flex flex-col space-y-3">
           <Text className={'block text-lg font-medium text-slate-700'}>
             {label}
           </Text>
