@@ -32,6 +32,7 @@ export default function RButton({
     </Pressable>
   );
 }
+
 const styles = StyleSheet.create({
   btnContainer: {
     flex: 1,

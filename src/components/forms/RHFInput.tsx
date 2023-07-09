@@ -32,16 +32,20 @@ export default function RHFInput({name, label, control, ...props}: IRHFInput) {
       control={control}
       name={name}
       render={({field, fieldState}) => (
-        <View style={styles.wrapper}>
-          <Text style={styles.label}>{label}</Text>
+        <View className="flex flex-col gap-3">
+          <Text className={'block text-lg font-medium text-slate-700'}>
+            {label}
+          </Text>
           <TextInput
-            style={styles.textInput}
+            className="px-3 py-3 bg-slate-50 border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md focus:ring-1"
             value={field?.value ?? ''}
             onChangeText={field?.onChange}
             {...props}
           />
           {fieldState?.error?.message && (
-            <Text style={styles.errorMsg}>{fieldState.error.message}</Text>
+            <Text className="text-rose-600 dark:text-rose-300">
+              {fieldState.error.message}
+            </Text>
           )}
         </View>
       )}
