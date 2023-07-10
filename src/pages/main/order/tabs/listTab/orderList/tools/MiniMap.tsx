@@ -1,17 +1,7 @@
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
 import React, {MutableRefObject, useCallback, useRef} from 'react';
 import MapView, {Marker} from 'react-native-maps';
-
-import {styled} from 'styled-components/native';
 import {IOrder} from '../../../../../../../app/store/slices/orderSlice';
-
-const StyledMapContainer = styled(View)`
-  height: 250px;
-`;
-const StyledMapView = styled(MapView)`
-  width: 100%;
-  height: 100%;
-`;
 
 export default function MiniMap({start, end}: IOrder) {
   // Map Ref
@@ -33,39 +23,40 @@ export default function MiniMap({start, end}: IOrder) {
   }, [start, end]);
 
   return (
-    <Pressable onPress={e => e.stopPropagation()}>
-      <StyledMapContainer>
-        <StyledMapView
-          ref={mapRef}
-          onMapReady={centerMap}
-          onMapLoaded={centerMap}
-          region={{
+    <View
+      className="bg-slate-50 h-[250px] shadow"
+      onPress={e => e.stopPropagation()}>
+      <MapView
+        className="h-[100%] w-[100%]"
+        ref={mapRef}
+        onMapReady={centerMap}
+        onMapLoaded={centerMap}
+        region={{
+          latitude: +start.latitude,
+          longitude: +start.longitude,
+          latitudeDelta: 0.3,
+          longitudeDelta: 0.3,
+        }}>
+        <Marker
+          title={start.name}
+          description={'출발지'}
+          coordinate={{
             latitude: +start.latitude,
             longitude: +start.longitude,
-            latitudeDelta: 0.3,
-            longitudeDelta: 0.3,
-          }}>
-          <Marker
-            title={start.name}
-            description={'출발지'}
-            coordinate={{
-              latitude: +start.latitude,
-              longitude: +start.longitude,
-            }}
-            identifier="start"
-          />
+          }}
+          identifier="start"
+        />
 
-          <Marker
-            title={end.name}
-            description={'도착지'}
-            coordinate={{
-              latitude: +end.latitude,
-              longitude: +end.longitude,
-            }}
-            identifier="end"
-          />
-        </StyledMapView>
-      </StyledMapContainer>
-    </Pressable>
+        <Marker
+          title={end.name}
+          description={'도착지'}
+          coordinate={{
+            latitude: +end.latitude,
+            longitude: +end.longitude,
+          }}
+          identifier="end"
+        />
+      </MapView>
+    </View>
   );
 }

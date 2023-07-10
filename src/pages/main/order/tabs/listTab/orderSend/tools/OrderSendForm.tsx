@@ -1,5 +1,5 @@
 import React from 'react';
-import {RHInput} from '../../../../../../../components/forms/RHFInput';
+import RHFInput from '../../../../../../../components/forms/RHFInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import RButton from '../../../../../../../components/buttons/RButton';
 import {styled} from 'styled-components/native';
@@ -35,8 +35,10 @@ export default function OrderSendForm({methods, setOpen}: any) {
     },
     onSubmit: async () => {
       //여기서 주문 정보 업로드
-      const {startAddress, endAddress, startCity, endCity, pay} = getValues();
+      const {title, startAddress, endAddress, startCity, endCity, pay} =
+        getValues();
       const res = await orderAPI.createOrder({
+        title,
         startAddress,
         endAddress,
         startCity,
@@ -56,26 +58,27 @@ export default function OrderSendForm({methods, setOpen}: any) {
   return (
     <KeyboardAwareScrollView>
       <FormWrapper>
-        <RHInput
-          label={'출발지'}
+        <RHFInput control={control} name="title" label="제목" />
+        <RHFInput
           control={control}
+          label={'출발지'}
           name={'startAddress'}
-          onPress={handlers.onPressStartAddressBtn}
           placeholder={'클릭 후 선택해주세요'}
           editable={false}
           selectTextOnFocus={false}
+          onPressIn={handlers.onPressStartAddressBtn}
         />
-        <RHInput
+        <RHFInput
           label={'도착지'}
           control={control}
           name={'endAddress'}
-          onPress={handlers.onPressEndAddressBtn}
+          onPressIn={handlers.onPressEndAddressBtn}
           placeholder={'클릭 후 선택해주세요'}
           editable={false}
           selectTextOnFocus={false}
         />
 
-        <RHInput
+        <RHFInput
           label={'수수료'}
           name={'pay'}
           control={control}

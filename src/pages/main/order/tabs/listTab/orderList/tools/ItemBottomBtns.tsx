@@ -1,10 +1,10 @@
-import {Alert, StyleSheet, View} from 'react-native';
+import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback} from 'react';
 import RButton from '../../../../../../../components/buttons/RButton';
 import useOrder from '../../../../../../../app/hooks/useOrder';
 import {IOrder} from '../../../../../../../app/store/slices/orderSlice';
 import * as orderAPI from '../../../../../../../app/apis/order';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
 export default function ItemBottomBtns({id}: IOrder) {
   const {acceptOrder, removeOrder} = useOrder();
 
@@ -29,19 +29,13 @@ export default function ItemBottomBtns({id}: IOrder) {
   };
 
   return (
-    <View style={styles.btnWrapper}>
-      <RButton
-        label="수락"
-        textStyle={styles.btnTxtStyle}
-        btnStyle={styles.btnStyle}
-        onPress={handlers.acceptOrder}
-      />
+    <View className="flex flex-row justify-between items-center p-3">
+      <Pressable className="">
+        <AntDesign name="hearto" size={23} style={{opacity: 0.6}} />
+      </Pressable>
+      <Pressable className="px-5 py-3 rounded-lg bg-teal-600 ">
+        <Text className="text-slate-50/95 font-semibold">채팅하기</Text>
+      </Pressable>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  btnWrapper: {flex: 1, flexDirection: 'row', gap: 10},
-  btnStyle: {backgroundColor: '#1FAB89'},
-  btnTxtStyle: {fontSize: 13},
-});

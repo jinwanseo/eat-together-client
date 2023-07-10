@@ -62,7 +62,7 @@ export default function OrderList() {
 
   const handlers = {
     onPressItem: useCallback((id: number) => {
-      setOpen(true);
+      // setOpen(true);
       setActiveCard(before => {
         return before === id ? null : id;
       });
@@ -94,10 +94,6 @@ export default function OrderList() {
           }}
         />
       </View>
-      {open && <BaseModal />}
     </View>
   );
 }
-const styles = StyleSheet.create({
-  flatList: {padding: 30},
-});
